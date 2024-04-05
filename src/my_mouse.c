@@ -1,14 +1,11 @@
 #include "../inc/my_mouse.h"
 
 int my_mouse(const char* file) {
-    FILE* f = fopen(file, "r");
-    if (f == NULL) {
+    struct Matrix m = Matrix.new();
+    if (m.read(file) || m.get_size()) {
+        m.free();
         return EXIT_FAILURE;
     }
-    char c;
-    while ((c = fgetc(f)) != EOF) {
-        printf("%c", c);
-    }
-    fclose(f);
+    m.print();
     return EXIT_SUCCESS;
 }
