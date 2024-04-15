@@ -143,21 +143,28 @@ _min_distance() {
             return dist - 1;
         }
 
+        // Move up
         if (row - 1 >= 0 && !visited[row - 1][col]) {
             q.append(&q, row - 1, col, dist + 1, current);
             visited[row - 1][col] = true;
         }
-        if (row + 1 < self->rows && !visited[row + 1][col]) {
-            q.append(&q, row + 1, col, dist + 1, current);
-            visited[row + 1][col] = true;
-        }
+
+        // Move left
         if (col - 1 >= 0 && !visited[row][col - 1]) {
             q.append(&q, row, col - 1, dist + 1, current);
             visited[row][col - 1] = true;
         }
+
+        // Move right
         if (col + 1 < self->cols && !visited[row][col + 1]) {
             q.append(&q, row, col + 1, dist + 1, current);
             visited[row][col + 1] = true;
+        }
+
+        // Move down
+        if (row + 1 < self->rows && !visited[row + 1][col]) {
+            q.append(&q, row + 1, col, dist + 1, current);
+            visited[row + 1][col] = true;
         }
     }
 
