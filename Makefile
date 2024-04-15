@@ -1,7 +1,7 @@
 CC=gcc
 CFLAGS=-Wall -Wextra -Werror #-fsanitize=address -g3
 BIN=my_mouse
-SRC=src/main.c src/my_mouse.c src/matrix.c
+SRC=src/main.c src/my_mouse.c src/matrix.c src/queue.c
 INC=inc
 
 all:
