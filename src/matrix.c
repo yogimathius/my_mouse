@@ -52,7 +52,8 @@ _get_size() {
     line[LF - self->buffer] = '\0';
     self->cols = self->rows = atoi(line);
     int index = LF - self->buffer;
-
+    self->header = (char*)malloc(index + 1);
+    strncpy(self->header, self->buffer, index);
     memmove(self->buffer, self->buffer + index + 1, self->size - index - 1);
     self->size -= index + 1;
     return 0;
@@ -82,9 +83,6 @@ _min_distance() {
     struct Node source = { 0, 0, 0, NULL, NULL };
     struct Node destination = { 0, 0, 0, NULL, NULL };
     _alloc();
-    self->max_val = 0;
-    self->max_row = 0;
-    self->max_col = 0;
     bool visited[self->rows][self->cols];
     while (i < self->rows) {
         int j = 0;
@@ -131,6 +129,8 @@ _min_distance() {
         int col = current->col;
         int dist = current->distance;
         if (row == destination.row && col == destination.col) {
+            printf("%s\n", self->header);
+
             destination_node = current;
             while (destination_node != NULL) {
                 self->matrix[destination_node->row][destination_node->col] = '0';
@@ -196,9 +196,6 @@ _new() {
         .matrix = NULL,
             .rows = 0,
             .cols = 0,
-            .max_val = 0,
-            .max_row = 0,
-            .max_col = 0,
             .read = &_read,
             .get_size = &_get_size,
             .alloc = &_alloc,

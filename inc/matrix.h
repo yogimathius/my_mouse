@@ -13,13 +13,11 @@
 
 struct Matrix {
     ssize_t size;
+    char* header;
     char* buffer;
     char** matrix;
     int rows;
     int cols;
-    int max_val;
-    int max_row;
-    int max_col;
     int (*read)(const char* filename);
     int (*get_size)();
     void (*alloc)();
