@@ -136,7 +136,7 @@ _min_distance() {
                 int row = destination_node->row;
                 int col = destination_node->col;
                 if ((row != source.row || col != source.col) && (row != destination.row || col != destination.col)) {
-                    self->matrix[destination_node->row][destination_node->col] = '0';
+                    self->matrix[destination_node->row][destination_node->col] = 'o';
                 }
                 destination_node = destination_node->parent;
             }
