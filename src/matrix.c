@@ -50,10 +50,11 @@ _get_size() {
     char line[SIZE];
     strncpy(line, self->buffer, LF - self->buffer);
     line[LF - self->buffer] = '\0';
-    self->cols = self->rows = atoi(line);
+    sscanf(line, "%dx%d", &self->rows, &self->cols);
     int index = LF - self->buffer;
     self->header = (char*)malloc(index + 1);
-    strncpy(self->header, self->buffer, index);
+    strncpy(self->header, line, index);
+    self->header[index] = '\0';
     memmove(self->buffer, self->buffer + index + 1, self->size - index - 1);
     self->size -= index + 1;
     return 0;
@@ -84,6 +85,7 @@ _min_distance() {
     struct Node destination = { 0, 0, 0, NULL, NULL };
     _alloc();
     bool visited[self->rows][self->cols];
+    printf("rows: %d, cols: %d\n", self->rows, self->cols);;
     while (i < self->rows) {
         int j = 0;
         while (j < self->cols) {
