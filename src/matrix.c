@@ -79,8 +79,8 @@ static int
 _min_distance() {
     int k = 0;
     int i = 0;
-    struct Node source = { 0, 0, 0, NULL };
-    struct Node destination = { 0, 0, 0, NULL };
+    struct Node source = { 0, 0, 0, NULL, NULL };
+    struct Node destination = { 0, 0, 0, NULL, NULL };
     _alloc();
     self->max_val = 0;
     self->max_row = 0;
@@ -118,7 +118,7 @@ _min_distance() {
     }
 
     struct Queue q = Queue.new();
-    q.append(&q, source.row, source.col, source.distance);
+    q.append(&q, source.row, source.col, source.distance, NULL);
     visited[source.row][source.col] = true;
 
     while (q.head) {
@@ -134,22 +134,22 @@ _min_distance() {
 
         if (row - 1 >= 0 && !visited[row - 1][col]) {
             printf("appending up %d %d\n", row - 1, col);
-            q.append(&q, row - 1, col, dist + 1);
+            q.append(&q, row - 1, col, dist + 1, current->next);
             visited[row - 1][col] = true;
         }
         if (row + 1 < self->rows && !visited[row + 1][col]) {
             printf("appending down: %d %d\n", row + 1, col);
-            q.append(&q, row + 1, col, dist + 1);
+            q.append(&q, row + 1, col, dist + 1, current->next);
             visited[row + 1][col] = true;
         }
         if (col - 1 >= 0 && !visited[row][col - 1]) {
             printf("appending left %d %d\n", row, col - 1);
-            q.append(&q, row, col - 1, dist + 1);
+            q.append(&q, row, col - 1, dist + 1, current->next);
             visited[row][col - 1] = true;
         }
         if (col + 1 < self->cols && !visited[row][col + 1]) {
             printf("appending right %d %d\n", row, col + 1);
-            q.append(&q, row, col + 1, dist + 1);
+            q.append(&q, row, col + 1, dist + 1, current->next);
             visited[row][col + 1] = true;
         }
     }

@@ -23,7 +23,7 @@ pop(struct Queue* self) {
 
 
 static void
-append(struct Queue* self, int row, int col, int dist) {
+append(struct Queue* self, int row, int col, int dist, struct Node* parent) {
     struct Node* n = (struct Node*)calloc(1, sizeof(struct Node));
     assert(n);
 
@@ -31,6 +31,7 @@ append(struct Queue* self, int row, int col, int dist) {
     n->col = col;
     n->row = row;
     n->distance = dist;
+    n->parent = parent;
 
     if (!self->head) { // The Queue is empty.
         assert(!self->cursor); // cursor = head = NULL now.
@@ -44,7 +45,7 @@ append(struct Queue* self, int row, int col, int dist) {
 }
 
 static void
-prepend(struct Queue* self, int row, int col, int dist) {
+prepend(struct Queue* self, int row, int col, int dist, struct Node* parent) {
     struct Node* n = (struct Node*)calloc(1, sizeof(struct Node));
     assert(n);
 
@@ -52,6 +53,7 @@ prepend(struct Queue* self, int row, int col, int dist) {
     n->col = col;
     n->row = row;
     n->distance = dist;
+    n->parent = parent;
 
     self->head = n;
     if (!self->cursor) { // The Queue is empty before inserting value.

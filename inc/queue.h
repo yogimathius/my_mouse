@@ -7,6 +7,7 @@ struct Node {
   int row;
   int col;
   int distance;
+  struct Node* parent;
   struct Node* next;
 };
 
@@ -16,8 +17,8 @@ struct Queue {
   struct Node* cursor;
 
   struct Node* (* const pop)(struct Queue* self);
-  void (* const append)(struct Queue* self, int row, int col, int dist);
-  void (* const prepend)(struct Queue* self, int row, int col, int dist);
+  void (* const append)(struct Queue* self, int row, int col, int dist, struct Node* parent);
+  void (* const prepend)(struct Queue* self, int row, int col, int dist, struct Node* parent);
 };
 
 extern const struct QueueClass {
