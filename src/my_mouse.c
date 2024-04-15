@@ -1,4 +1,5 @@
 #include "../inc/my_mouse.h"
+#include "../inc/matrix.h"
 
 int my_mouse(const char* file) {
     struct Matrix m = Matrix.new();
@@ -7,7 +8,7 @@ int my_mouse(const char* file) {
         return EXIT_FAILURE;
     }
     m.print();
-    m.build();
-    m.debug();
+    int dist = m.min_distance();
+    printf("Minimum distance: %d\n", dist);
     return EXIT_SUCCESS;
 }

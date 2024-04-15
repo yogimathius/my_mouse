@@ -1,4 +1,7 @@
 #include "../inc/my_mouse.h"
+#include "../inc/matrix.h"
+#include "../inc/queue.h"
+#include <stdbool.h>
 
 #define min(a, b) ((a < b) ? a : b)
 
@@ -73,22 +76,36 @@ _alloc() {
 }
 
 // TODO: Update this function to check for the mouse map instead of bsq
-static void
-_build() {
+static int
+_min_distance() {
     int k = 0;
     int i = 0;
-
+    struct Node source = { 0, 0, 0, NULL };
+    struct Node destination = { 0, 0, 0, NULL };
     _alloc();
     self->max_val = 0;
     self->max_row = 0;
     self->max_col = 0;
     printf("rows: %d, cols: %d\n", self->rows, self->cols);
+    bool visited[self->rows][self->cols];
     while (i < self->rows) {
         int j = 0;
         while (j < self->cols) {
-            if (self->buffer[k] == ' ') {
-                self->matrix[i][j] = 1;
+            if (self->buffer[k] == '1') {
+                source.row = i;
+                source.col = j;
             }
+            if (self->buffer[k] == '2') {
+                destination.row = i;
+                destination.col = j;
+            }
+            if (self->buffer[k] == '0') {
+                visited[i][j] = true;
+            }
+            else {
+                visited[i][j] = false;
+            }
+
             if (k < self->size) {
                 if (self->buffer[k] == '\n') {
                     j -= 1;
@@ -99,6 +116,40 @@ _build() {
         }
         i += 1;
     }
+
+    struct Queue q = Queue.new();
+    q.append(&q, source.col, source.row, source.distance);
+    visited[source.row][source.col] = true;
+
+    while (q.head) {
+        struct Node* current = (struct Node*)malloc(sizeof(struct Node));
+        current = q.pop(&q);
+        int row = current->row;
+        int col = current->col;
+        int dist = current->distance;
+
+        if (row == destination.row && col == destination.col) {
+            return dist;
+        }
+
+        if (row - 1 >= 0 && !visited[row - 1][col]) {
+            q.append(&q, row - 1, col, dist + 1);
+            visited[row - 1][col] = true;
+        }
+        if (row + 1 < self->rows && !visited[row + 1][col]) {
+            q.append(&q, row + 1, col, dist + 1);
+            visited[row + 1][col] = true;
+        }
+        if (col - 1 >= 0 && !visited[row][col - 1]) {
+            q.append(&q, row, col - 1, dist + 1);
+            visited[row][col - 1] = true;
+        }
+        if (col + 1 < self->cols && !visited[row][col + 1]) {
+            q.append(&q, row, col + 1, dist + 1);
+            visited[row][col + 1] = true;
+        }
+    }
+    return 0;
 }
 
 static void
@@ -143,7 +194,7 @@ _new() {
             .read = &_read,
             .get_size = &_get_size,
             .alloc = &_alloc,
-            .build = &_build,
+            .min_distance = &_min_distance,
             .debug = &_debug,
             .print = &_print,
             .free = &_free,
