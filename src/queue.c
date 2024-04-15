@@ -23,7 +23,7 @@ pop(struct Queue* self) {
 
 
 static void
-append(struct Queue* self, int col, int row, int dist) {
+append(struct Queue* self, int row, int col, int dist) {
     struct Node* n = (struct Node*)calloc(1, sizeof(struct Node));
     assert(n);
 
@@ -44,7 +44,7 @@ append(struct Queue* self, int col, int row, int dist) {
 }
 
 static void
-prepend(struct Queue* self, int col, int row, int dist) {
+prepend(struct Queue* self, int row, int col, int dist) {
     struct Node* n = (struct Node*)calloc(1, sizeof(struct Node));
     assert(n);
 

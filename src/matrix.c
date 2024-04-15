@@ -75,7 +75,6 @@ _alloc() {
     }
 }
 
-// TODO: Update this function to check for the mouse map instead of bsq
 static int
 _min_distance() {
     int k = 0;
@@ -86,20 +85,21 @@ _min_distance() {
     self->max_val = 0;
     self->max_row = 0;
     self->max_col = 0;
-    printf("rows: %d, cols: %d\n", self->rows, self->cols);
     bool visited[self->rows][self->cols];
     while (i < self->rows) {
         int j = 0;
         while (j < self->cols) {
             if (self->buffer[k] == '1') {
+                printf("source: %d %d\n", i, j);
                 source.row = i;
                 source.col = j;
             }
             if (self->buffer[k] == '2') {
+                printf("destination: %d %d\n", i, j);
                 destination.row = i;
                 destination.col = j;
             }
-            if (self->buffer[k] == '0') {
+            if (self->buffer[k] == '*') {
                 visited[i][j] = true;
             }
             else {
@@ -118,7 +118,7 @@ _min_distance() {
     }
 
     struct Queue q = Queue.new();
-    q.append(&q, source.col, source.row, source.distance);
+    q.append(&q, source.row, source.col, source.distance);
     visited[source.row][source.col] = true;
 
     while (q.head) {
@@ -127,24 +127,28 @@ _min_distance() {
         int row = current->row;
         int col = current->col;
         int dist = current->distance;
-
+        printf("CHECKING row: %d, col: %d, dist: %d\n", row, col, dist);
         if (row == destination.row && col == destination.col) {
-            return dist;
+            return dist - 1;
         }
 
         if (row - 1 >= 0 && !visited[row - 1][col]) {
+            printf("appending up %d %d\n", row - 1, col);
             q.append(&q, row - 1, col, dist + 1);
             visited[row - 1][col] = true;
         }
         if (row + 1 < self->rows && !visited[row + 1][col]) {
+            printf("appending down: %d %d\n", row + 1, col);
             q.append(&q, row + 1, col, dist + 1);
             visited[row + 1][col] = true;
         }
         if (col - 1 >= 0 && !visited[row][col - 1]) {
+            printf("appending left %d %d\n", row, col - 1);
             q.append(&q, row, col - 1, dist + 1);
             visited[row][col - 1] = true;
         }
         if (col + 1 < self->cols && !visited[row][col + 1]) {
+            printf("appending right %d %d\n", row, col + 1);
             q.append(&q, row, col + 1, dist + 1);
             visited[row][col + 1] = true;
         }

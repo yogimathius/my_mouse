@@ -16,8 +16,8 @@ struct Queue {
   struct Node* cursor;
 
   struct Node* (* const pop)(struct Queue* self);
-  void (* const append)(struct Queue* self, int col, int row, int dist);
-  void (* const prepend)(struct Queue* self, int col, int row, int dist);
+  void (* const append)(struct Queue* self, int row, int col, int dist);
+  void (* const prepend)(struct Queue* self, int row, int col, int dist);
 };
 
 extern const struct QueueClass {
