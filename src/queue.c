@@ -21,7 +21,6 @@ pop(struct Queue* self) {
     return popped;
 }
 
-
 static void
 append(struct Queue* self, int row, int col, int dist, struct Node* parent) {
     struct Node* n = (struct Node*)calloc(1, sizeof(struct Node));

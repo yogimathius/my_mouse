@@ -14,7 +14,7 @@
 struct Matrix {
     ssize_t size;
     char* buffer;
-    int** matrix;
+    char** matrix;
     int rows;
     int cols;
     int max_val;
