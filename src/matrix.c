@@ -85,7 +85,6 @@ _min_distance() {
     struct Node destination = { 0, 0, 0, NULL, NULL };
     _alloc();
     bool visited[self->rows][self->cols];
-    printf("rows: %d, cols: %d\n", self->rows, self->cols);;
     while (i < self->rows) {
         int j = 0;
         while (j < self->cols) {
