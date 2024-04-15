@@ -133,7 +133,11 @@ _min_distance() {
 
             destination_node = current;
             while (destination_node != NULL) {
-                self->matrix[destination_node->row][destination_node->col] = '0';
+                int row = destination_node->row;
+                int col = destination_node->col;
+                if ((row != source.row || col != source.col) && (row != destination.row || col != destination.col)) {
+                    self->matrix[destination_node->row][destination_node->col] = '0';
+                }
                 destination_node = destination_node->parent;
             }
             return dist - 1;
