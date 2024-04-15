@@ -86,24 +86,9 @@ _build() {
     while (i < self->rows) {
         int j = 0;
         while (j < self->cols) {
-            // if (i == 0 || j == 0) {
-            //     self->matrix[i][j] = (self->buffer[k] == 'o') ? 0 : 1;
-            // }
-            // else {
             if (self->buffer[k] == ' ') {
-                // self->matrix[i][j] = min(min(self->matrix[i - 1][j], self->matrix[i][j - 1]), self->matrix[i - 1][j - 1]) + 1;
-                // if (self->matrix[i][j] > self->max_val) {
-                //     self->max_val = self->matrix[i][j];
-                //     self->max_row = i;
-                //     self->max_col = j;
-                // }
                 self->matrix[i][j] = 1;
-
             }
-            // else {
-            //     self->matrix[i][j] = 0;
-            // }
-            // }
             if (k < self->size) {
                 if (self->buffer[k] == '\n') {
                     j -= 1;
