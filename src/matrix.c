@@ -86,7 +86,6 @@ _validate_map() {
     int exit_count = 0;
     for (int i = 0; i < self->rows; i++) {
         for (int j = 0; j < self->cols; j++) {
-            printf("%c", self->matrix[i][j]);
             if (self->matrix[i][j] == '1') {
                 entrance_count++;
             }
