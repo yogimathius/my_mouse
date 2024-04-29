@@ -9,7 +9,7 @@ int my_mouse(const char* file) {
     }
 
     int dist = m.min_distance();
-    if (dist == -1) {
+    if (dist == -1 || dist == 0) {
         printf("MAP ERROR!\n");
         m.free();
         return EXIT_FAILURE;
