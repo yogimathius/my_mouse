@@ -85,7 +85,13 @@ _validate_map() {
     int entrance_count = 0;
     int exit_count = 0;
     for (int i = 0; i < self->rows; i++) {
+        if (strlen(self->matrix[i]) != self->cols) {
+            return false;
+        }
         for (int j = 0; j < self->cols; j++) {
+            if (j == self->cols - 1 && self->matrix[i][j] != '\n') {
+                return false;
+            }
             if (self->matrix[i][j] == '1') {
                 entrance_count++;
             }
@@ -95,11 +101,9 @@ _validate_map() {
         }
     }
     if (entrance_count != 1) {
-        printf("Invalid number of entrances\n");
         return false;
     }
     if (exit_count != 1) {
-        printf("Invalid number of exits\n");
         return false;
     }
 
