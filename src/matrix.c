@@ -85,6 +85,8 @@ _min_distance() {
     struct Node destination = { 0, 0, 0, NULL, NULL };
     _alloc();
     bool visited[self->rows][self->cols];
+    int entrance_count = 0;
+    int exit_count = 0;
     while (i < self->rows) {
         int j = 0;
         while (j < self->cols) {
@@ -92,11 +94,13 @@ _min_distance() {
                 source.row = i;
                 source.col = j;
                 self->matrix[i][j] = '1';
+                entrance_count++;
             }
             else if (self->buffer[k] == '2') {
                 destination.row = i;
                 destination.col = j;
                 self->matrix[i][j] = '2';
+                exit_count++;
             }
             else if (self->buffer[k] == '*') {
                 visited[i][j] = true;
@@ -106,6 +110,10 @@ _min_distance() {
                 visited[i][j] = false;
                 self->matrix[i][j] = ' ';
             }
+            // else {
+            //     printf("Invalid character found in self: %c\n", self->buffer[k]);
+            //     return 0;
+            // }
 
             if (k < self->size) {
                 if (self->buffer[k] == '\n') {
@@ -117,7 +125,9 @@ _min_distance() {
         }
         i += 1;
     }
-
+    if (entrance_count != 1 || exit_count != 1) {
+        return -1;
+    }
     struct Queue q = Queue.new();
     q.append(&q, source.row, source.col, source.distance, NULL);
     visited[source.row][source.col] = true;
@@ -200,7 +210,6 @@ _free() {
     }
     free(self->matrix);
 }
-
 
 static struct Matrix
 _new() {
