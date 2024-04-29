@@ -85,13 +85,7 @@ _validate_map() {
     int entrance_count = 0;
     int exit_count = 0;
     for (int i = 0; i < self->rows; i++) {
-        if (strlen(self->matrix[i]) != self->cols) {
-            return false;
-        }
         for (int j = 0; j < self->cols; j++) {
-            if (j == self->cols - 1 && self->matrix[i][j] != '\n') {
-                return false;
-            }
             if (self->matrix[i][j] == '1') {
                 entrance_count++;
             }
@@ -129,22 +123,23 @@ _min_distance() {
     _alloc();
 
     bool visited[self->rows][self->cols];
-    // int entrance_count = 0;
-    // int exit_count = 0;
     while (i < self->rows) {
         int j = 0;
         while (j < self->cols) {
+            if (j == self->cols - 1 && self->buffer[k + 1] != '\n') {
+                printf("Invalid row length: %d\n", (int)strlen(self->matrix[i]));
+                printf("Expected row length: %d\n", self->rows);
+                return false;
+            }
             if (self->buffer[k] == '1') {
                 source.row = i;
                 source.col = j;
                 self->matrix[i][j] = '1';
-                // entrance_count++;
             }
             else if (self->buffer[k] == '2') {
                 destination.row = i;
                 destination.col = j;
                 self->matrix[i][j] = '2';
-                // exit_count++;
             }
             else if (self->buffer[k] == '*') {
                 visited[i][j] = true;
@@ -165,12 +160,15 @@ _min_distance() {
                 }
                 k += 1;
             }
+            else if (self->buffer[k] == '\0') {
+                return -1;
+            }
             j += 1;
         }
         i += 1;
     }
     if (!_validate_map()) {
-        return 0;
+        return -1;
     }
     struct Queue q = Queue.new();
     q.append(&q, source.row, source.col, source.distance, NULL);
