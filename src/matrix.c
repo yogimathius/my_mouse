@@ -84,6 +84,9 @@ _min_distance() {
     struct Node source = { 0, 0, 0, NULL, NULL };
     struct Node destination = { 0, 0, 0, NULL, NULL };
     _alloc();
+    if (self->rows * self->cols > 1000) {
+        return -1;
+    }
     bool visited[self->rows][self->cols];
     int entrance_count = 0;
     int exit_count = 0;
