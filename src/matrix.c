@@ -1,7 +1,6 @@
 #include "../inc/my_mouse.h"
 #include "../inc/matrix.h"
 #include "../inc/queue.h"
-#include <stdbool.h>
 
 #define min(a, b) ((a < b) ? a : b)
 
@@ -77,6 +76,47 @@ _alloc() {
     }
 }
 
+static bool
+_validate_map() {
+    if (self->rows <= 0 || self->cols <= 0) {
+        return false;
+    }
+
+    int entrance_count = 0;
+    int exit_count = 0;
+    for (int i = 0; i < self->rows; i++) {
+        for (int j = 0; j < self->cols; j++) {
+            printf("%c", self->matrix[i][j]);
+            if (self->matrix[i][j] == '1') {
+                entrance_count++;
+            }
+            else if (self->matrix[i][j] == '2') {
+                exit_count++;
+            }
+        }
+    }
+    if (entrance_count != 1) {
+        printf("Invalid number of entrances\n");
+        return false;
+    }
+    if (exit_count != 1) {
+        printf("Invalid number of exits\n");
+        return false;
+    }
+
+    char* first_line = self->matrix[0];
+    for (int i = 0; i < self->rows; i++) {
+        for (int j = 0; j < self->cols; j++) {
+            if (strchr(first_line, self->matrix[i][j]) == NULL && self->matrix[i][j] != ' ' && self->matrix[i][j] != '1' && self->matrix[i][j] != '2') {
+                printf("Invalid character found in self: %c\n", self->matrix[i][j]);
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
 static int
 _min_distance() {
     int k = 0;
@@ -84,12 +124,10 @@ _min_distance() {
     struct Node source = { 0, 0, 0, NULL, NULL };
     struct Node destination = { 0, 0, 0, NULL, NULL };
     _alloc();
-    if (self->rows * self->cols > 1000) {
-        return -1;
-    }
+
     bool visited[self->rows][self->cols];
-    int entrance_count = 0;
-    int exit_count = 0;
+    // int entrance_count = 0;
+    // int exit_count = 0;
     while (i < self->rows) {
         int j = 0;
         while (j < self->cols) {
@@ -97,13 +135,13 @@ _min_distance() {
                 source.row = i;
                 source.col = j;
                 self->matrix[i][j] = '1';
-                entrance_count++;
+                // entrance_count++;
             }
             else if (self->buffer[k] == '2') {
                 destination.row = i;
                 destination.col = j;
                 self->matrix[i][j] = '2';
-                exit_count++;
+                // exit_count++;
             }
             else if (self->buffer[k] == '*') {
                 visited[i][j] = true;
@@ -128,8 +166,8 @@ _min_distance() {
         }
         i += 1;
     }
-    if (entrance_count != 1 || exit_count != 1) {
-        return -1;
+    if (!_validate_map()) {
+        return 0;
     }
     struct Queue q = Queue.new();
     q.append(&q, source.row, source.col, source.distance, NULL);
@@ -227,6 +265,7 @@ _new() {
             .debug = &_debug,
             .print = &_print,
             .free = &_free,
+            .validate_map = &_validate_map,
     });
 }
 

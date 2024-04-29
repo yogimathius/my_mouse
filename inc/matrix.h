@@ -7,6 +7,7 @@
 #include <fcntl.h> 
 #include <unistd.h>
 #include <sys/stat.h>
+#include <stdbool.h>
 
 #define SIZE 16
 #define __MatrixClass_self_alignement 0xC0
@@ -25,6 +26,7 @@ struct Matrix {
     void (*debug)();
     void (*print)();
     void (*free)();
+    bool (*validate_map)();
 };
 
 
