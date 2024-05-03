@@ -19,6 +19,11 @@ struct Matrix {
     char** matrix;
     int rows;
     int cols;
+    char full;
+    char empty;
+    char path;
+    char start;
+    char end;
     int (*read)(const char* filename);
     int (*get_size)();
     void (*alloc)();

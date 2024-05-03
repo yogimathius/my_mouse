@@ -49,7 +49,7 @@ _get_size() {
     char line[SIZE];
     strncpy(line, self->buffer, LF - self->buffer);
     line[LF - self->buffer] = '\0';
-    sscanf(line, "%dx%d", &self->rows, &self->cols);
+    sscanf(line, "%dx%d%c%c%c%c%c", &self->rows, &self->cols, &self->full, &self->empty, &self->path, &self->start, &self->end);
     int index = LF - self->buffer;
     self->header = (char*)malloc(index + 1);
     strncpy(self->header, line, index);
@@ -86,10 +86,10 @@ _validate_map() {
     int exit_count = 0;
     for (int i = 0; i < self->rows; i++) {
         for (int j = 0; j < self->cols; j++) {
-            if (self->matrix[i][j] == '1') {
+            if (self->matrix[i][j] == self->start) {
                 entrance_count++;
             }
-            else if (self->matrix[i][j] == '2') {
+            else if (self->matrix[i][j] == self->end) {
                 exit_count++;
             }
         }
@@ -104,7 +104,7 @@ _validate_map() {
     char* first_line = self->matrix[0];
     for (int i = 0; i < self->rows; i++) {
         for (int j = 0; j < self->cols; j++) {
-            if (strchr(first_line, self->matrix[i][j]) == NULL && self->matrix[i][j] != ' ' && self->matrix[i][j] != '1' && self->matrix[i][j] != '2') {
+            if (strchr(first_line, self->matrix[i][j]) == NULL && self->matrix[i][j] != self->empty && self->matrix[i][j] != self->start && self->matrix[i][j] != self->end) {
                 printf("Invalid character found in self: %c\n", self->matrix[i][j]);
                 return false;
             }
@@ -131,23 +131,23 @@ _min_distance() {
                 printf("Expected row length: %d\n", self->rows);
                 return false;
             }
-            if (self->buffer[k] == '1') {
+            if (self->buffer[k] == self->start) {
                 source.row = i;
                 source.col = j;
-                self->matrix[i][j] = '1';
+                self->matrix[i][j] = self->start;
             }
-            else if (self->buffer[k] == '2') {
+            else if (self->buffer[k] == self->end) {
                 destination.row = i;
                 destination.col = j;
-                self->matrix[i][j] = '2';
+                self->matrix[i][j] = self->end;
             }
-            else if (self->buffer[k] == '*') {
+            else if (self->buffer[k] == self->full) {
                 visited[i][j] = true;
-                self->matrix[i][j] = '*';
+                self->matrix[i][j] = self->full;
             }
             else {
                 visited[i][j] = false;
-                self->matrix[i][j] = ' ';
+                self->matrix[i][j] = self->empty;
             }
             // else {
             //     printf("Invalid character found in self: %c\n", self->buffer[k]);
@@ -189,7 +189,7 @@ _min_distance() {
                 int row = destination_node->row;
                 int col = destination_node->col;
                 if ((row != source.row || col != source.col) && (row != destination.row || col != destination.col)) {
-                    self->matrix[destination_node->row][destination_node->col] = 'o';
+                    self->matrix[destination_node->row][destination_node->col] = self->path;
                 }
                 destination_node = destination_node->parent;
             }
